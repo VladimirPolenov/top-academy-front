@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import MemeCard from './Card';
+import { Route, Routes, Link } from 'react-router-dom';
 import './App.css';
+import Favorites from './Favorites';
+import AddMeme from './AddMeme';
+import List from './List';
 
 function App() {
   const [memes, setMemes] = useState([
@@ -32,8 +35,6 @@ function App() {
 
   const [selectedMemeId, setSelectedMemeId] = useState(null);
 
-  const selectedMeme = memes.find(meme => meme.id === selectedMemeId);
-
   const handleMemeSelect = (memeId) => {
     setSelectedMemeId(memeId);
   };
@@ -49,35 +50,25 @@ function App() {
         <p>{!selectedMemeId ? "Выберите мем для просмотра подробностей" : `Выбран мем № ${selectedMemeId}`}</p>
       </header>
 
+      <nav>
+        <Link to="/">Главная</Link><br />
+        <Link to="/add">Добавить мем</Link><br />
+        <Link to="/favorites">Любимые мемы</Link><br />
+      </nav>
+
       <div className="app-content">
-        {!selectedMemeId ? (
-          <section className="memes-list">
-            <h2>Список мемов</h2>
-            <div className="memes-grid">
-              {memes.map(meme => (
-                <div 
-                  key={meme.id}
-                  className={`meme-item ${selectedMemeId === meme.id ? 'selected' : ''}`}
-                  onClick={() => handleMemeSelect(meme.id)}
-                >
-                  <img src={meme.url} alt={meme.title} className="meme-thumbnail" />
-                  <h4>{meme.title}</h4>
-                  <span className="likes">❤️ {meme.likes}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : (
-          <section className="meme-details">
-            {selectedMeme ? (
-              <MemeCard meme={selectedMeme} onClose={handleCloseCard} />
-            ) : (
-              <div className="no-selection">
-                <p>Выберите мем из списка для просмотра</p>
-              </div>
-            )}
-          </section>
-        )}
+        <Routes>
+          <Route path="/" element={
+            <List
+              selectedMemeId={selectedMemeId}
+              memes={memes}
+              handleCloseCard={handleCloseCard}
+              handleMemeSelect={handleMemeSelect}
+            />
+            } />
+          <Route path="/add" element={<AddMeme />} />
+          <Route paht="/favorites" element={<Favorites />} />
+        </Routes>
       </div>
     </div>
   );
