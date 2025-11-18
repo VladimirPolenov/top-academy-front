@@ -1,13 +1,18 @@
-import Route from "react";
+import Route, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CardContainer, CardHeader } from "./CardStyles";
+import { MemesContext } from "./MemesContext";
 
-export default function List({ memes }) {
+export default function List({ fav }) {
  const navigate = useNavigate();
  
  const handleSelect = (id) => {
     navigate(`/meme/${id}`);
  };
+
+ const { memes, favoriteMemes } = useContext(MemesContext);
+
+ const memesList = fav ? favoriteMemes : memes;
 
  return (
     <CardContainer>
@@ -15,7 +20,7 @@ export default function List({ memes }) {
         <section className="memes-list">
             <h2>Список мемов</h2>
             <div className="memes-grid">
-            {memes.map(meme => (
+            {memesList.map(meme => (
                 <div 
                 key={meme.id}
                 className={`meme-item`}

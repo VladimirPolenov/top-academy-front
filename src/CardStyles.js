@@ -9,4 +9,6 @@ export const CardHeader = styled.p`
 export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
+  ${(props) => { console.log(props); return props.fav === 'y' ? 'background-color: pink' : ''}}
 `;
