@@ -5,7 +5,8 @@ import AddMeme from './AddMeme';
 import List from './List';
 import MemeCard from './Card';
 import styled from 'styled-components';
-import { MemesContext } from './MemesContext';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 const Navigation = styled.nav`
   & > a {
@@ -21,45 +22,9 @@ const Navigation = styled.nav`
 `;
 
 function App() {
-  const [memes, setMemes] = useState([
-    {
-      id: 1,
-      title: 'Программист за работой',
-      author: 'DevMaster',
-      likes: 1542,
-      favorite: false,
-    },
-    {
-      id: 2,
-      title: 'Когда код работает с первого раза',
-      author: 'CodeWizard',
-      likes: 2897,
-      favorite: false,
-    },
-    {
-      id: 3,
-      title: 'Дедлайн близко',
-      author: 'StressDeveloper',
-      likes: 3421,
-      favorite: false,
-    },
-    {
-      id: 4,
-      title: 'Найден баг в продакшене',
-      author: 'BugHunter',
-      likes: 1876,
-      favorite: false,
-    }
-  ]);
-  
-  const contextValue = {
-    memes,
-    setMemes,
-    favoriteMemes: memes.filter((item) => item.favorite)
-  };
 
   return (
-    <MemesContext.Provider value={contextValue}>
+    <Provider store={store}>
       <div className="meme-app">
         <header className="app-header">
           <h1>🔥 Коллекция IT Мемов</h1>
@@ -82,7 +47,7 @@ function App() {
           </Routes>
         </div>
       </div>
-    </MemesContext.Provider>
+    </Provider>
   );
 }
 

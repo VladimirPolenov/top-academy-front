@@ -1,7 +1,7 @@
-import Route, { useContext } from "react";
+import Route, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CardContainer, CardHeader } from "./CardStyles";
-import { MemesContext } from "./MemesContext";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function List({ fav }) {
  const navigate = useNavigate();
@@ -10,9 +10,11 @@ export default function List({ fav }) {
     navigate(`/meme/${id}`);
  };
 
- const { memes, favoriteMemes } = useContext(MemesContext);
+ const dispatch = useDispatch();
 
- const memesList = fav ? favoriteMemes : memes;
+ const memes = useSelector(state => state.memes.items);
+
+ let memesList = fav ? memes.filter(item => item.favorite) : memes;
 
  return (
     <CardContainer>

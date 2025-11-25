@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CardContainer, CardHeader } from './CardStyles';
 import styled from 'styled-components';
-import { MemesContext } from './MemesContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { likeMeme } from './features/memes/memeSlice';
 
 const FavButton = styled.button`
   margin-left: 1rem;
@@ -14,16 +15,10 @@ export default function MemeCard() {
   const memeId = params.id;
   const navigate = useNavigate();
 
-  const { memes, setMemes } = useContext(MemesContext);
+  const memes = useSelector(state => state.memes.items);
 
   const meme = memes.find((item) => item.id === parseInt(memeId));
-
-  const setFavorite = (meme) => {
-    const newMemes = JSON.parse(JSON.stringify(memes));
-    const index = memes.findIndex((item) => item.id === meme.id);
-    newMemes[index].favorite = !newMemes[index].favorite;
-    setMemes(newMemes);
-  };
+  const dispatch = useDispatch();
 
   if (!meme) return null;
 
@@ -43,7 +38,7 @@ export default function MemeCard() {
           <p>Автор: {meme.author}</p>
           <p>Лайки: {meme.likes}</p>
         </div>
-        <FavButton onClick={() => { setFavorite(meme); }}>Change Favorite</FavButton>
+        <FavButton onClick={() => { dispatch(likeMeme(meme.id)); }}>Change Favorite</FavButton>
       </div>
     </CardContainer>
   );
